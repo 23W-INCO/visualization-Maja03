@@ -1,36 +1,15 @@
-# Psychological Health Analysis Dashboard
+## Key User Group
+- **Psychologists and Mental Health Professionals:** Specifically, professionals engaged in university mental health services or conducting research on student psychological well-being.
 
-This dashboard offers a comprehensive analysis of psychological health data obtained from a university survey. It provides insights into the prevalence of depression, anxiety, and panic attacks among students, along with the effectiveness of various treatments across these conditions.
+## User Objectives
+- **Understanding Psychological Trends:** Users aim to comprehend the prevalence and correlations among depression, anxiety, and panic attacks within university students.
+- **Treatment Efficacy Assessment:** Evaluating the effectiveness of various treatments in mitigating these psychological conditions among students.
 
-## User Group
-- **Medical Personnel:** Seeking insights into the prevalence and co-occurrence of psychological conditions.
-- **Researchers:** Analyzing data for studies related to mental health trends among university students.
-- **Data Analysts:** Extracting valuable information for further research or policy recommendations.
+## Visualization Efficiency
+- **Venn Diagram:** This visual representation aids in highlighting overlaps and intersections between psychological conditions. It enables a quick comprehension of co-occurrences among depression, anxiety, and panic attacks, facilitating a better grasp of their relationships.
+- **Bar Charts:** Effectively showcase treatment effectiveness, allowing users to compare the number of treated and untreated cases across different conditions.
 
-## Objectives
-- **Understanding Co-Occurrence:** Visualizing the overlaps between depression, anxiety, and panic attacks using a Venn diagram for a clearer understanding.
-- **Treatment Analysis:** Assessing the efficacy of treatments by type across different conditions using bar charts.
+## Additional Application Features
+- **Filtering Capabilities:** The dashboard includes filters for age, academic year, or other demographic factors. These features enable users to narrow down data analysis based on specific parameters, providing more targeted insights.
+- **Interactive Elements:** Interactive functionalities enhance user engagement, allowing seamless exploration of data subsets or specific conditions. Users can dynamically modify visualizations to cater to their analysis needs.
 
-## Features
-- **Venn Diagram:** Illustrates the intersection of conditions, aiding in understanding their co-occurrence.
-- **Bar Charts:** Displays counts of individuals with various conditions based on gender and treatment type for quick comparisons.
-- **Interactive Elements:** Filters for age groups, academic years, or other relevant factors to offer deeper analysis options.
-- **Usability:** An intuitive interface allowing users to navigate through the data with ease.
-
-## Building and Running the Dashboard
-To run the dashboard locally:
-
-1. Clone the repository.
-2. Install necessary dependencies.
-3. Launch the application.
-4. Access the dashboard via a web browser.
-
-## Guidelines
-- **Focus on User Specificity:** Tailor features for the specific needs of medical personnel, researchers, or analysts.
-- **Optimize User Interface:** Ensure a user-friendly experience with intuitive navigation and interaction.
-- **Iterative Development:** Continuously improve features based on user feedback.
-- **Simplicity in Deployment:** Use standard tools and straightforward deployment methods for easy setup.
-
----
-
-Your feedback and contributions to enhance this dashboard are highly appreciated!
