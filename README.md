@@ -1,15 +1,36 @@
-## Key User Group
+# Psychological Health Analysis Dashboard
 
-Health and wellness professionals seeking comprehensive insights into individuals' health metrics for analysis or personalized recommendations. This user group may include healthcare providers, fitness coaches, or researchers specializing in health data.
+This dashboard offers a comprehensive analysis of psychological health data obtained from a university survey. It provides insights into the prevalence of depression, anxiety, and panic attacks among students, along with the effectiveness of various treatments across these conditions.
 
-## User Objectives
+## User Group
+- **Medical Personnel:** Seeking insights into the prevalence and co-occurrence of psychological conditions.
+- **Researchers:** Analyzing data for studies related to mental health trends among university students.
+- **Data Analysts:** Extracting valuable information for further research or policy recommendations.
 
-Users aim to comprehend correlations and patterns among various health metrics like age, sleep duration, quality of sleep, physical activity, stress levels, heart rate, and daily steps. Their goal involves understanding how these factors interplay and impact overall health outcomes for personalized advice or research purposes.
+## Objectives
+- **Understanding Co-Occurrence:** Visualizing the overlaps between depression, anxiety, and panic attacks using a Venn diagram for a clearer understanding.
+- **Treatment Analysis:** Assessing the efficacy of treatments by type across different conditions using bar charts.
 
-## Visualization Choice
+## Features
+- **Venn Diagram:** Illustrates the intersection of conditions, aiding in understanding their co-occurrence.
+- **Bar Charts:** Displays counts of individuals with various conditions based on gender and treatment type for quick comparisons.
+- **Interactive Elements:** Filters for age groups, academic years, or other relevant factors to offer deeper analysis options.
+- **Usability:** An intuitive interface allowing users to navigate through the data with ease.
 
-Opting for D3.js for visualization allows for granular customization, which is vital for displaying multi-variable relationships effectively. Techniques like scatterplot matrices or parallel coordinates can be employed to provide an interactive, comprehensive view of correlations between various health metrics.
+## Building and Running the Dashboard
+To run the dashboard locally:
 
-## Other Application Features
+1. Clone the repository.
+2. Install necessary dependencies.
+3. Launch the application.
+4. Access the dashboard via a web browser.
 
-The application could offer filtering options to focus on specific age groups, stress levels, or activity levels. Interactive elements like tooltips or clickable data points can enhance exploration. Automation in data retrieval and backend setup is crucial for seamless data processing, ensuring the app can handle various datasets efficiently.
+## Guidelines
+- **Focus on User Specificity:** Tailor features for the specific needs of medical personnel, researchers, or analysts.
+- **Optimize User Interface:** Ensure a user-friendly experience with intuitive navigation and interaction.
+- **Iterative Development:** Continuously improve features based on user feedback.
+- **Simplicity in Deployment:** Use standard tools and straightforward deployment methods for easy setup.
+
+---
+
+Your feedback and contributions to enhance this dashboard are highly appreciated!
