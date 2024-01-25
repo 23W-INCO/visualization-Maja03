@@ -10,7 +10,6 @@
       "extensions": [
         "ms-python.python",
         "ms-toolsai.jupyter"
-        // Add other extensions if needed
       ]
     }
   },
