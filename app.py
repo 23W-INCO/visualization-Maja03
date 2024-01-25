@@ -4,7 +4,6 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 
-# Wizualizacja 1: Venn Diagram
 fig1 = go.Figure(go.Venn(
     subsets=[set(depressed.index), set(anxious.index), set(panicking.index)],
     set_labels=("Depressed", "Anxious", "Having Panic Attacks"),
@@ -13,7 +12,6 @@ fig1 = go.Figure(go.Venn(
 ))
 fig1.update_layout(title="Conditions")
 
-# Wizualizacja 2: Bar Chart
 fig2 = go.Figure()
 
 for gender, gender_count in gender_counts.items():
@@ -28,16 +26,10 @@ for gender, gender_count in gender_counts.items():
 
 fig2.update_layout(title="Condition by Gender", xaxis=dict(tickangle=20), barmode='stack')
 
-# Osadzanie w aplikacji
-# Przykład aplikacji Dash
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
-
 app = dash.Dash(__name__)
 
 app.layout = html.Div(children=[
-    html.H1(children='Twoje Wizualizacje'),
+    html.H1(children='Your Visualizations'),
 
     html.Div(children=[
         dcc.Graph(
@@ -50,6 +42,5 @@ app.layout = html.Div(children=[
         )
     ])
 ])
-
 if __name__ == '__main__':
     app.run_server(debug=True)
