@@ -3,24 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D3.js Visualization</title>
-    <!-- Include D3.js library -->
+    <title>FHIR Data Visualization</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
 <body>
     <h1>FHIR Data Visualization</h1>
 
-  venn3(subsets = [set(depressed.index), 
-                 set(anxious.index), 
-                 set(panicking.index)], 
-      set_labels = ("Depressed", "Anxious", "Having Panic Attacks"),
-      set_colors = ("orange", "purple", "green"),
-      alpha = 0.9)
+    <div id="venn-diagram"></div>
+    <script>
+        var subsets = [new Set([1, 2, 3]), new Set([2, 3, 4]), new Set([3, 4, 5])];
+        var setLabels = ["Set 1", "Set 2", "Set 3"];
+        var setColors = ["orange", "purple", "green"];
 
-plt.title("Conditions", fontsize = 16)
-plt.show()
-
-    labels = ['Depressed', 'Anxious', 'Having Panic \nAttacks', 
+        labels = ['Depressed', 'Anxious', 'Having Panic \nAttacks', 
           'Depressed and \nAnxious', 'Depressed and Having \nPanic Attacks', 
           'Anxious and Having \nPanic Attacks', 'All Three']
 
@@ -68,35 +63,38 @@ ax.set_title("Condition by Gender", fontsize=20)
 plt.xticks(fontsize=8, ha='right', rotation=20)
 ax.legend()
 plt.show()
+    </script>
+
+    <div id="bar-chart"></div>
     <script>
-        // Example D3.js code for a simple bar chart
-        const data = [
-            {"condition": "Depressed", "count": 50},
-            {"condition": "Anxious", "count": 30},
-            {"condition": "Panic", "count": 20}
-            // Add more data as needed
+        var data = [
+            { label: "Depressed", values: [10, 20] },
+            { label: "Anxious", values: [15, 25] },
+            { label: "Panic", values: [5, 15] }
         ];
 
-        const svg = d3.select("body").append("svg")
-            .attr("width", 400)
-            .attr("height", 200);
+        venn3(subsets = [set(depressed.index), 
+                 set(anxious.index), 
+                 set(panicking.index)], 
+      set_labels = ("Depressed", "Anxious", "Having Panic Attacks"),
+      set_colors = ("orange", "purple", "green"),
+      alpha = 0.9)
 
-        svg.selectAll("rect")
-            .data(data)
-            .enter().append("rect")
-            .attr("x", (d, i) => i * 100)
-            .attr("y", d => 200 - d.count)
-            .attr("width", 80)
-            .attr("height", d => d.count)
-            .attr("fill", "steelblue");
+plt.title("Conditions", fontsize = 16)
+plt.show()
+    </script>
 
-        svg.selectAll("text")
-            .data(data)
-            .enter().append("text")
-            .attr("x", (d, i) => i * 100 + 40)
-            .attr("y", d => 200 - d.count - 5)
-            .attr("text-anchor", "middle")
-            .text(d => d.count);
+    <h1>Binary Data Visualization</h1>
+    <div id="binary-data"></div>
+    <script>
+        var binaryData = [
+            { condition: "Depression", count: 1 },
+            { condition: "Anxiety", count: 0 },
+            { condition: "Panic", count: 1 }
+        ];
+
+        // Your D3.js Binary Data Visualization code here...
     </script>
 </body>
 </html>
+
