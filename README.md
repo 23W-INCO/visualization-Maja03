@@ -7,7 +7,7 @@
 
 ## Visualization Efficiency
 - **Venn Diagram:** This visual representation aids in highlighting overlaps and intersections between psychological conditions. It enables a quick comprehension of co-occurrences among depression, anxiety, and panic attacks, facilitating a better grasp of their relationships.
-- **Bar Charts:** Effectively showcase treatment effectiveness, allowing users to compare the number of treated and untreated cases across different conditions.
+- **Bar Charts:**  Effectively showcase treatment effectiveness, allowing users to compare the incidence of different conditions across gender categories. The use of distinctive colors enhances readability, and the stacked layout provides a clear visual representation of the overall distribution. This empowers healthcare professionals and stakeholders to identify patterns and make informed decisions based on gender-specific mental health conditions.
 
 ## Additional Application Features
 - **Filtering Capabilities:** The dashboard includes filters for age, academic year, or other demographic factors. These features enable users to narrow down data analysis based on specific parameters, providing more targeted insights.
