@@ -1,63 +1,42 @@
-import matplotlib.pyplot as plt
-from matplotlib_venn import venn3
-import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+from flask import Flask, render_template, request, jsonify
 
-data = pd.read_csv('Student Mental health.csv')
+# Read CSV file
+df = pd.read_csv('Student Mental health.csv')
 
-# Sample variables for the bar chart
-labels = ['Depressed', 'Anxious', 'Having Panic \nAttacks',
-          'Depressed and \nAnxious', 'Depressed and Having \nPanic Attacks',
-          'Anxious and Having \nPanic Attacks', 'All Three']
+# Count of each condition
+condition_counts = df[['Do you have Depression?', 'Do you have Anxiety?', 'Do you have Panic attack?']].apply(pd.value_counts)
 
-gender_counts = {
-    "Male": [
-        (depressed["Gender"] == "Male").sum(),
-        (anxious["Gender"] == "Male").sum(),
-        (panicking["Gender"] == "Male").sum(),
-        ((depressed["Depression"] == "Yes") & (anxious["Anxiety"] == "Yes")).sum(),
-        ((depressed["Depression"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-        ((anxious["Anxiety"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-        ((depressed["Depression"] == "Yes") & (anxious["Anxiety"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-    ],
-
-    "Female": [
-        (depressed["Gender"] == "Female").sum(),
-        (anxious["Gender"] == "Female").sum(),
-        (panicking["Gender"] == "Female").sum(),
-        ((depressed["Depression"] == "Yes") & (anxious["Anxiety"] == "Yes")).sum(),
-        ((depressed["Depression"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-        ((anxious["Anxiety"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-        ((depressed["Depression"] == "Yes") & (anxious["Anxiety"] == "Yes") & (panicking["Panic_Attack"] == "Yes")).sum(),
-    ]
-}
-
-colors = ['yellow', 'gray']  # Define your desired colors here
-
-# Plotting Venn Diagram
-venn3(subsets=[set(depressed.index), set(anxious.index), set(panicking.index)],
-      set_labels=("Depressed", "Anxious", "Having Panic Attacks"),
-      set_colors=("orange", "purple", "green"),
-      alpha=0.9)
-plt.title("Conditions", fontsize=16)
+# Bar plot for condition counts
+condition_counts.plot(kind='bar', stacked=True)
+plt.title('Counts of Conditions')
+plt.xlabel('Condition')
+plt.ylabel('Count')
 plt.show()
 
-# Plotting Bar Chart
-fig, ax = plt.subplots(figsize=(10, 3))
-bottom = np.zeros(7)
+# Flask application
+app = Flask(__name__)
 
-for gender, gender_count in gender_counts.items():
-    p = ax.bar(labels,
-               gender_count,
-               width=0.8,
-               label=gender,
-               bottom=bottom)
-    bottom += gender_count
-    ax.bar_label(container=p,
-                 label_type='center',
-                 fontsize=10)
+# FHIR-like data
+fhir_data = [
+    {"patientId": i, "condition": condition, "count": count}
+    for i, (condition, count) in enumerate(zip(condition_counts.index, condition_counts.sum(axis=1)))
+]
 
-ax.set_title("Condition by Gender", fontsize=20)
-plt.xticks(fontsize=8, ha='right', rotation=20)
-ax.legend()
-plt.show()
+# Routes
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/api/fhir', methods=['GET', 'POST'])
+def fhir_api():
+    if request.method == 'GET':
+        return jsonify(fhir_data)
+    elif request.method == 'POST':
+        new_record = request.json
+        fhir_data.append(new_record)
+        return jsonify({"status": "Record added successfully"})
+
+if __name__ == '__main__':
+    app.run(debug=True)
