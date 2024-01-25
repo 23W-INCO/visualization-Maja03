@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js Visualization</title>
+    <!-- Include D3.js library -->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+    <h1>FHIR Data Visualization</h1>
+
+  venn3(subsets = [set(depressed.index), 
+                 set(anxious.index), 
+                 set(panicking.index)], 
+      set_labels = ("Depressed", "Anxious", "Having Panic Attacks"),
+      set_colors = ("orange", "purple", "green"),
+      alpha = 0.9)
+
+plt.title("Conditions", fontsize = 16)
+plt.show()
+
+    labels = ['Depressed', 'Anxious', 'Having Panic \nAttacks', 
+          'Depressed and \nAnxious', 'Depressed and Having \nPanic Attacks', 
+          'Anxious and Having \nPanic Attacks', 'All Three']
+
+gender_counts = {
+    "Male": [
+        (only_depressed["Gender"] == "Male").sum(),
+        (only_anxious["Gender"] == "Male").sum(),
+        (only_panicking["Gender"] == "Male").sum(),
+        (depressed_anxious["Gender"] == "Male").sum(),
+        (depressed_panicking["Gender"] == "Male").sum(),
+        (anxious_panicking["Gender"] == "Male").sum(),
+        (all_three["Gender"] == "Male").sum(),
+       
+    ],
+
+    "Female": [
+        (only_depressed["Gender"] == "Female").sum(),
+        (only_anxious["Gender"] == "Female").sum(),
+        (only_panicking["Gender"] == "Female").sum(),
+        (depressed_anxious["Gender"] == "Female").sum(),
+        (depressed_panicking["Gender"] == "Female").sum(),
+        (anxious_panicking["Gender"] == "Female").sum(),
+        (all_three["Gender"] == "Female").sum(),
+     
+    ]
+}
+
+colors = ['yellow', 'gray']  # Define your desired colors here
+
+fig, ax = plt.subplots(figsize=(10, 3))
+bottom = np.zeros(7)  # Adjust to 8 since you have 8 labels now
+
+for gender, gender_count in gender_counts.items():
+    p = ax.bar(labels,
+               gender_count,
+               width=0.8,
+               label=gender,
+               bottom=bottom)
+    bottom += gender_count
+    ax.bar_label(container=p,
+                 label_type='center',
+                 fontsize=10)
+
+ax.set_title("Condition by Gender", fontsize=20)
+plt.xticks(fontsize=8, ha='right', rotation=20)
+ax.legend()
+plt.show()
+    <script>
+        // Example D3.js code for a simple bar chart
+        const data = [
+            {"condition": "Depressed", "count": 50},
+            {"condition": "Anxious", "count": 30},
+            {"condition": "Panic", "count": 20}
+            // Add more data as needed
+        ];
+
+        const svg = d3.select("body").append("svg")
+            .attr("width", 400)
+            .attr("height", 200);
+
+        svg.selectAll("rect")
+            .data(data)
+            .enter().append("rect")
+            .attr("x", (d, i) => i * 100)
+            .attr("y", d => 200 - d.count)
+            .attr("width", 80)
+            .attr("height", d => d.count)
+            .attr("fill", "steelblue");
+
+        svg.selectAll("text")
+            .data(data)
+            .enter().append("text")
+            .attr("x", (d, i) => i * 100 + 40)
+            .attr("y", d => 200 - d.count - 5)
+            .attr("text-anchor", "middle")
+            .text(d => d.count);
+    </script>
+</body>
+</html>
