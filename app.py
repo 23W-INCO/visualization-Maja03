@@ -52,13 +52,13 @@ has_condition = pd.concat([depressed, anxious, panicking]).drop_duplicates()
 has_condition
 
 # Define additional DataFrames here
-only_depressed = df[(df["Anxiety"] == 0) & (df["Panic Attacks"] == 0)]
-only_anxious = df[(df["Depression"] == 0) & (df["Panic Attacks"] == 0)]
-only_panicking = df[(df["Depression"] == 0) & (df["Anxiety"] == 0)]
-depressed_anxious = df[(df["Anxiety"] == 1) & (df["Panic Attacks"] == 0)]
-depressed_panicking = df[(df["Anxiety"] == 0) & (df["Panic Attacks"] == 1)]
-anxious_panicking = df[(df["Depression"] == 0) & (df["Panic Attacks"] == 1)]
-all_three = df[(df["Depression"] == 1) & (df["Anxiety"] == 1) & (df["Panic Attacks"] == 1)]
+only_depressed = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 0)]
+only_anxious = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 0)]
+only_panicking = panicking[(panicking["Depression"] == 0) & (panicking["Anxiety"] == 0)]
+depressed_anxious = depressed[(depressed["Anxiety"] == 1) & (depressed["Panic Attacks"] == 0)]
+depressed_panicking = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 1)]
+anxious_panicking = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 1)]
+all_three = has_condition[(has_condition["Depression"] == 1) & (has_condition["Anxiety"] == 1) & (has_condition["Panic Attacks"] == 1)]
 
 num_depressed = (df["Depression"] == 1).sum()
 num_anxious = (df["Anxiety"] == 1).sum()
