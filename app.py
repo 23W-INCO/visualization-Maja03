@@ -57,6 +57,10 @@ panicking = df[(df["Panic Attacks"] == 1)]
 has_condition = pd.concat([depressed, anxious, panicking]).drop_duplicates()
 has_condition
 
+treated_subset = has_condition.loc[df["Treated"] == 1]
+print(len(treated_subset))
+treated_subset
+
 # Define additional DataFrames here
 only_depressed = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 0)]
 only_anxious = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 0)]
@@ -87,9 +91,10 @@ plt.title("Conditions", fontsize=14)
 plt.show()
 
 # Bar chart
-labels = ['Depressed', 'Anxious', 'Having Panic Attacks',
-          'Depressed and Anxious', 'Depressed and Having Panic Attacks',
-          'Anxious and Having Panic Attacks', 'All Three']
+
+labels = ['Depressed', 'Anxious', 'Having Panic \nAttacks', 
+          'Depressed and \nAnxious', 'Depressed and Having \nPanic Attacks', 
+          'Anxious and Having \nPanic Attacks', 'All Three']
 
 gender_counts = {
     "Male": [
@@ -100,7 +105,9 @@ gender_counts = {
         (depressed_panicking["Gender"] == "Male").sum(),
         (anxious_panicking["Gender"] == "Male").sum(),
         (all_three["Gender"] == "Male").sum(),
+       
     ],
+
     "Female": [
         (only_depressed["Gender"] == "Female").sum(),
         (only_anxious["Gender"] == "Female").sum(),
@@ -109,6 +116,7 @@ gender_counts = {
         (depressed_panicking["Gender"] == "Female").sum(),
         (anxious_panicking["Gender"] == "Female").sum(),
         (all_three["Gender"] == "Female").sum(),
+     
     ]
 }
 
