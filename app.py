@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib_venn import venn3
 
-# Read data from CSV file
+# Read data from the CSV file
 df = pd.read_csv('Student Mental health.csv')
 
 # Rename columns
@@ -26,12 +26,7 @@ df["Year"] = df["Year"].str[-1:]
 # Display data after transformations
 df.head()
 
-# Define conditions based on your data
-depressed = df[df["Depression"] == 1]
-anxious = df[df["Anxiety"] == 1]
-panicking = df[df["Panic Attacks"] == 1]
-has_condition = df[(df["Depression"] == 1) | (df["Anxiety"] == 1) | (df["Panic Attacks"] == 1)]
-
+# Define additional DataFrames here
 only_depressed = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 0)]
 only_anxious = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 0)]
 only_panicking = panicking[(panicking["Depression"] == 0) & (panicking["Anxiety"] == 0)]
@@ -41,6 +36,10 @@ anxious_panicking = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attac
 all_three = has_condition[(has_condition["Depression"] == 1) & (has_condition["Anxiety"] == 1) & (has_condition["Panic Attacks"] == 1)]
 
 # Venn diagram
+depressed = df[df['Depression'] == 1]
+anxious = df[df['Anxiety'] == 1]
+panicking = df[df['Panic Attacks'] == 1]
+
 venn3(subsets=[set(depressed.index), set(anxious.index), set(panicking.index)],
       set_labels=("Depressed", "Anxious", "Having Panic Attacks"),
       set_colors=("orange", "purple", "green"),
@@ -51,7 +50,8 @@ plt.show()
 
 # Bar chart
 labels = ['Depressed', 'Anxious', 'Having Panic Attacks',
-          'Depressed and Anxious', 'Depressed and Having Panic Attacks']
+          'Depressed and Anxious', 'Depressed and Having Panic Attacks',
+          'Anxious and Having Panic Attacks', 'All Three']
 
 gender_counts = {
     "Male": [
