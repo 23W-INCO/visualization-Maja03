@@ -1,7 +1,13 @@
-import pandas as pd
 import numpy as np
+import pandas as pd
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import random
+import seaborn as sns
+import statsmodels.stats as sm
+
 from matplotlib_venn import venn3
+from scipy import stats
 
 # Read data from the CSV file
 df = pd.read_csv('Student Mental health.csv')
