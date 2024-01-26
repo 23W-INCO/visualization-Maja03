@@ -26,9 +26,30 @@ df["Year"] = df["Year"].str[-1:]
 # Display data after transformations
 df.head()
 
+has_smtn = list()
+dep_col = df.columns.get_loc("Depression")
+anx_col = df.columns.get_loc("Anxiety")
+pa_col = df.columns.get_loc("Panic Attacks")
+
+for row in range(len(df.index)):
+    if df.iloc[row, dep_col] == 1:
+        has_smtn.append(1)
+    elif df.iloc[row, anx_col] == 1:
+        has_smtn.append(1)
+    elif df.iloc[row, pa_col] == 1:
+        has_smtn.append(1)
+    else:
+        has_smtn.append(0)
+
+df["Condition"] = has_smtn
+df.head()
+
 depressed = df[(df["Depression"] == 1)]
 anxious = df[(df["Anxiety"] == 1)]
 panicking = df[(df["Panic Attacks"] == 1)]
+
+has_condition = pd.concat([depressed, anxious, panicking]).drop_duplicates()
+has_condition
 
 # Define additional DataFrames here
 only_depressed = df[(df["Anxiety"] == 0) & (df["Panic Attacks"] == 0)]
@@ -38,6 +59,13 @@ depressed_anxious = df[(df["Anxiety"] == 1) & (df["Panic Attacks"] == 0)]
 depressed_panicking = df[(df["Anxiety"] == 0) & (df["Panic Attacks"] == 1)]
 anxious_panicking = df[(df["Depression"] == 0) & (df["Panic Attacks"] == 1)]
 all_three = df[(df["Depression"] == 1) & (df["Anxiety"] == 1) & (df["Panic Attacks"] == 1)]
+
+num_depressed = (df["Depression"] == 1).sum()
+num_anxious = (df["Anxiety"] == 1).sum()
+num_pa = (df["Panic Attacks"] == 1).sum()
+num_treated = (df["Treated"] == 1).sum()
+num_w_condition = (df["Condition"] == 1).sum()
+num_wo_condition = (df["Condition"] == 0).sum()
 
 # Venn diagram
 depressed = df[df['Depression'] == 1]
