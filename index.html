@@ -1,46 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FHIR Data Visualization</title>
+    <title>Student Mental Health Visualization</title>
     <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
+
 <body>
-    <h1>FHIR Data Visualization</h1>
-
-    <div id="venn-diagram"></div>
     <script>
-        // D3.js code for venn-diagram
-        var subsets = [new Set([1, 2, 3]), new Set([2, 3, 4]), new Set([3, 4, 5])];
-        var setLabels = ["Depressed", "Anxious", "Having Panic Attacks"];
-        var setColors = ["orange", "purple", "green"];
+        // Wczytaj dane z pliku CSV
+        d3.csv("Student Mental health.csv").then(function (data) {
+            // Zmień nazwy kolumn
+            var newnames = ["Timestamp", "Gender", "Age", "Major", "Year", "CGPA", "Married", "Depression", "Anxiety", "Panic Attacks", "Treated"];
+            data.columns = newnames;
 
-        // Your D3.js code for venn-diagram here...
-    </script>
+            // Wyświetl pierwsze wiersze danych w konsoli (do debugowania)
+            console.log(data.slice(0, 5));
 
-    <h1>Condition by Gender</h1>
-    <div id="bar-chart"></div>
-    <script>
-        // D3.js code for bar-chart
-        var labels = ['Depressed', 'Anxious', 'Having Panic Attacks', 'Depressed and Anxious', 'Depressed and Having Panic Attacks', 'Anxious and Having Panic Attacks', 'All Three'];
+            data.forEach(function (d) {
+                d["Married"] = (d["Married"] === "Yes") ? 1 : 0;
+                d["Depression"] = (d["Depression"] === "Yes") ? 1 : 0;
+                d["Anxiety"] = (d["Anxiety"] === "Yes") ? 1 : 0;
+                d["Panic Attacks"] = (d["Panic Attacks"] === "Yes") ? 1 : 0;
+                d["Treated"] = (d["Treated"] === "Yes") ? 1 : 0;
+                d["Year"] = +d["Year"].slice(-1); // Zmniejsz do ostatniego znaku w roku i przekształć na liczbę
+            });
 
-        // Your D3.js code for bar-chart here...
-    </script>
+            // Wyświetl dane w konsoli (do debugowania)
+            console.log(data);
 
-    <h1>Binary Data Visualization</h1>
-    <div id="binary-data"></div>
-    <script>
-        // D3.js code for binary-data
-        var binaryData = [
-            { condition: "Depression", count: 1 },
-            { condition: "Anxiety", count: 0 },
-            { condition: "Panic", count: 1 }
-        ];
+            // Ustawienia wykresu kolistego
+            var widthPie = 400;
+            var heightPie = 400;
+            var radiusPie = Math.min(widthPie, heightPie) / 2;
 
-        // Your D3.js code for binary-data here...
+            // Kolorystyka
+            var colorPie = d3.scaleOrdinal(["orange", "purple", "green"]);
+
+            // Tworzenie wykresu kolistego
+            var svgPie = d3.select("body").append("svg")
+                .attr("width", widthPie)
+                .attr("height", heightPie)
+                .append("g")
+                .attr("transform", "translate(" + widthPie / 2 + "," + heightPie / 2 + ")");
+
+            // Tworzenie łuków
+            var arc = d3.arc()
+                .innerRadius(0)
+                .outerRadius(radiusPie);
+
+            // Tworzenie sektora
+            var pie = d3.pie()
+                .value(function (d) { return 1; }); // Wartość 1 dla każdego wiersza
+
+            // Dodawanie sektorów do wykresu
+            var gPie = svgPie.selectAll(".arc")
+                .data(pie(data))
+                .enter().append("g")
+                .attr("class", "arc");
+
+            // Rysowanie łuków
+            gPie.append("path")
+                .attr("d", arc)
+                .style("fill", function (d) { return colorPie(d.data.label); });
+
+            // Dodawanie etykiet
+            gPie.append("text")
+                .attr("transform", function (d) { return "translate(" + arc.centroid(d) + ")"; })
+                .attr("dy", ".35em")
+                .style("text-anchor", "middle")
+                .text(function (d) { return d.data.label; });
+
+            // Ustawienia wykresu słupkowego
+            var labelsBar = ['Depressed', 'Anxious', 'Having Panic Attacks', 'Depressed and Anxious', 'Depressed and Having Panic Attacks', 'Anxious and Having Panic Attacks', 'All Three'];
+
+            // Przygotowanie danych dla wykresu słupkowego
+            var genderCounts = {
+                "Male": d3.values(d3.rollup(data, v => d3.sum(v, d => d.Depression), d => d.Gender)),
+                "Female": d3.values(d3.rollup(data, v => d3.sum(v, d => d.Depression), d => d.Gender))
+            };
+
+            var colorsBar = ['yellow', 'gray'];
+
+            // Ustawienia wykresu
+            var widthBar = 800;
+            var heightBar = 400;
+            var marginBar = { top: 20, right: 30, bottom: 30, left: 40 };
+
+            // Skala dla osi X
+            var xScaleBar = d3.scaleBand()
+                .domain(labelsBar)
+                .range([marginBar.left, widthBar - marginBar.right])
+                .padding(0.1);
+
+            // Skala dla osi Y
+            var yScaleBar = d3.scaleLinear()
+                .domain([0, d3.max(genderCounts["Male"].concat(genderCounts["Female"]))])
+                .range([heightBar - marginBar.bottom, marginBar.top]);
+
+            // Tworzenie SVG dla wykresu słupkowego
+            var svgBar = d3.select("body").append("svg")
+                .attr("width", widthBar)
+                .attr("height", heightBar);
+
+            // Dodanie słupków dla płci "Male"
+            svgBar.selectAll("rect.male")
+                .data(genderCounts["Male"])
+                .enter().append("rect")
+                .attr("class", "male")
+                .attr("x", d => xScaleBar(labelsBar[genderCounts["Male"].indexOf(d)]))
+                .attr("y", d => yScaleBar(d))
+                .attr("width", xScaleBar.bandwidth() / 2)
+                .attr("height", d => heightBar - marginBar.bottom - yScaleBar(d))
+                .attr("fill", colorsBar[0]);
+
+            // Dodanie słupków dla płci "Female"
+            svgBar.selectAll("rect.female")
+                .data(genderCounts["Female"])
+                .enter().append("rect")
+                .attr("class", "female")
+                .attr("x", d => xScaleBar(labelsBar[genderCounts["Female"].indexOf(d)]) + xScaleBar.bandwidth() / 2)
+                .attr("y", d => yScaleBar(d))
+                .attr("width", xScaleBar.bandwidth() / 2)
+                .attr("height", d => heightBar - marginBar.bottom - yScaleBar(d))
+                .attr("fill", colorsBar[1]);
+
+            // Dodanie osi X
+            svgBar.append("g")
+                .attr("transform", `translate(0,${heightBar - marginBar.bottom})`)
+                .call(d3.axisBottom(xScaleBar));
+
+            // Dodanie osi Y
+            svgBar.append("g")
+                .attr("transform", `translate(${marginBar.left},0)`)
+                .call(d3.axisLeft(yScaleBar));
+
+            // Dodanie tytułu
+            svgBar.append("text")
+                .attr("x", widthBar / 2)
+                .attr("y", marginBar.top / 2)
+                .attr("text-anchor", "middle")
+                .style("font-size", "20px")
+                .text("Condition by Gender");
+
+            // Dodanie legendy
+            svgBar.append("rect")
+                .attr("x", marginBar.left)
+                .attr("y", marginBar.top)
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", colorsBar[0]);
+
+            svgBar.append("text")
+                .attr("x", marginBar.left + 30)
+                .attr("y", marginBar.top + 15)
+                .text("Male");
+
+            svgBar.append("rect")
+                .attr("x", marginBar.left + 100)
+                .attr("y", marginBar.top)
+                .attr("width", 20)
+                .attr("height", 20)
+                .attr("fill", colorsBar[1]);
+
+            svgBar.append("text")
+                .attr("x", marginBar.left + 130)
+                .attr("y", marginBar.top + 15)
+                .text("Female");
+        });
     </script>
 </body>
-</html>
 
+</html>
 
