@@ -26,6 +26,10 @@ df["Year"] = df["Year"].str[-1:]
 # Display data after transformations
 df.head()
 
+depressed = df[(df["Depression"] == 1)]
+anxious = df[(df["Anxiety"] == 1)]
+panicking = df[(df["Panic Attacks"] == 1)]
+
 # Define additional DataFrames here
 only_depressed = df[(df["Anxiety"] == 0) & (df["Panic Attacks"] == 0)]
 only_anxious = df[(df["Depression"] == 0) & (df["Panic Attacks"] == 0)]
