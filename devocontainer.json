@@ -1,24 +1,12 @@
 {
-  "name": "Python Codespace",
-  "dockerFile": "Dockerfile",
-  "context": ".",
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "zsh"
-      },
-      "extensions": [
-        "ms-python.python",
-        "ms-toolsai.jupyter"
-      ]
-    }
+  "name": "My Codespace",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceMount": "source=.",
+  "runArgs": ["-u", "codespace"],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
   },
-  "forwardPorts": [5000],
-  "portsAttributes": {
-    "8000": {
-      "label": "Application",
-      "onAutoForward": "openBrowser"
-    }
-  },
- "postCreateCommand": "apk add --no-cache git && pip install Flask==2.0.1 gunicorn && gunicorn -b 0.0.0.0:8000 main:app"
+  "extensions": ["ms-python.python"],
+  "postCreateCommand": "python app.py"  // Dostosuj tę linijkę do swojego przypadku
 }
