@@ -25,7 +25,13 @@ df["Year"] = df["Year"].str[-1:]
 
 # Wyświetl dane po przekształceniach
 df.head()
-
+only_depressed = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 0)]
+only_anxious = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 0)]
+only_panicking = panicking[(panicking["Depression"] == 0) & (panicking["Anxiety"] == 0)]
+depressed_anxious = depressed[(depressed["Anxiety"] == 1) & (depressed["Panic Attacks"] == 0)]
+depressed_panicking = depressed[(depressed["Anxiety"] == 0) & (depressed["Panic Attacks"] == 1)]
+anxious_panicking = anxious[(anxious["Depression"] == 0) & (anxious["Panic Attacks"] == 1)]
+all_three = has_condition[(has_condition["Depression"] == 1) & (has_condition["Anxiety"] == 1) & (has_condition["Panic Attacks"] == 1)]
 # Wykres Venna
 depressed = df[df['Depression'] == 1]
 anxious = df[df['Anxiety'] == 1]
