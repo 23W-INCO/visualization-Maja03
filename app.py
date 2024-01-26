@@ -1,46 +1,88 @@
-import plotly.graph_objects as go
-import plotly.express as px
-import dash
-import dash_core_components as dcc
-import dash_html_components as html
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib_venn import venn3
 
-fig1 = go.Figure(go.Venn(
-    subsets=[set(depressed.index), set(anxious.index), set(panicking.index)],
-    set_labels=("Depressed", "Anxious", "Having Panic Attacks"),
-    set_colors=("orange", "purple", "green"),
-    opacity=0.9
-))
-fig1.update_layout(title="Conditions")
+# Wczytaj dane z pliku CSV
+df = pd.read_csv('Student Mental health.csv')
 
-fig2 = go.Figure()
+# Zmień nazwy kolumn
+newnames = ["Timestamp", "Gender", "Age", "Major", "Year", "CGPA", "Married", "Depression", "Anxiety", "Panic Attacks", "Treated"]
+df.columns = newnames
+
+# Przekształć kolumny na wartości binarne
+def to_binary(d):
+    if d == "Yes": return 1
+    if d == "No": return 0
+
+df["Married"] = df["Married"].apply(to_binary)
+df["Depression"] = df["Depression"].apply(to_binary)
+df["Anxiety"] = df["Anxiety"].apply(to_binary)
+df["Panic Attacks"] = df["Panic Attacks"].apply(to_binary)
+df["Treated"] = df["Treated"].apply(to_binary)
+
+df["Year"] = df["Year"].str[-1:]
+
+# Wyświetl dane po przekształceniach
+df.head()
+
+# Wykres Venna
+depressed = df[df['Depression'] == 1]
+anxious = df[df['Anxiety'] == 1]
+panicking = df[df['Panic Attacks'] == 1]
+
+venn3(subsets=[set(depressed.index), set(anxious.index), set(panicking.index)],
+      set_labels=("Depressed", "Anxious", "Having Panic Attacks"),
+      set_colors=("orange", "purple", "green"),
+      alpha=0.7)
+
+plt.title("Conditions", fontsize=14)
+plt.show()
+
+# Wykres słupkowy
+labels = ['Depressed', 'Anxious', 'Having Panic Attacks',
+          'Depressed and Anxious', 'Depressed and Having Panic Attacks',
+          'Anxious and Having Panic Attacks', 'All Three']
+
+gender_counts = {
+    "Male": [
+        (only_depressed["Gender"] == "Male").sum(),
+        (only_anxious["Gender"] == "Male").sum(),
+        (only_panicking["Gender"] == "Male").sum(),
+        (depressed_anxious["Gender"] == "Male").sum(),
+        (depressed_panicking["Gender"] == "Male").sum(),
+        (anxious_panicking["Gender"] == "Male").sum(),
+        (all_three["Gender"] == "Male").sum(),
+    ],
+    "Female": [
+        (only_depressed["Gender"] == "Female").sum(),
+        (only_anxious["Gender"] == "Female").sum(),
+        (only_panicking["Gender"] == "Female").sum(),
+        (depressed_anxious["Gender"] == "Female").sum(),
+        (depressed_panicking["Gender"] == "Female").sum(),
+        (anxious_panicking["Gender"] == "Female").sum(),
+        (all_three["Gender"] == "Female").sum(),
+    ]
+}
+
+colors = ['yellow', 'gray']  # Zdefiniuj wybrane kolory tutaj
+
+fig, ax = plt.subplots(figsize=(10, 3))
+bottom = np.zeros(7)  # Dostosuj do 8, jeśli masz 8 etykiet teraz
 
 for gender, gender_count in gender_counts.items():
-    fig2.add_trace(go.Bar(
-        x=labels,
-        y=gender_count,
-        name=gender,
-        marker_color=colors,
-        text=gender_count,
-        textposition='auto',
-    ))
+    p = ax.bar(labels,
+               gender_count,
+               width=0.8,
+               label=gender,
+               bottom=bottom)
+    bottom += gender_count
+    ax.bar_label(container=p,
+                 label_type='center',
+                 fontsize=10)
 
-fig2.update_layout(title="Condition by Gender", xaxis=dict(tickangle=20), barmode='stack')
+ax.set_title("Condition by Gender", fontsize=20)
+plt.xticks(fontsize=8, ha='right', rotation=20)
+ax.legend()
+plt.show()
 
-app = dash.Dash(__name__)
-
-app.layout = html.Div(children=[
-    html.H1(children='Your Visualizations'),
-
-    html.Div(children=[
-        dcc.Graph(
-            id='venn-diagram',
-            figure=fig1
-        ),
-        dcc.Graph(
-            id='bar-chart',
-            figure=fig2
-        )
-    ])
-])
-if __name__ == '__main__':
-    app.run_server(debug=True)
